@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Image, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RectButton } from 'react-native-gesture-handler';
@@ -9,8 +9,19 @@ import purpleHeartIcon from '../../assets/images/icons/heart.png';
 import studyIcon from '../../assets/images/icons/study.png';
 
 import styles from './styles';
+import api from '../../services/api';
 
 function Landing() {
+
+    const [totalConnections, setTotalConnections] = useState(0);
+
+    useEffect(() => {
+        api.get('connections').then(res => {
+            const { total } = res.data;
+
+            setTotalConnections(total);
+        })
+    }, []);
 
     const { navigate } = useNavigation();
 
@@ -52,7 +63,7 @@ function Landing() {
             </View>
 
             <Text style={styles.totalConnections}>
-                Total de 285 conexões já realizadas {" "}
+                Total de {totalConnections} conexões já realizadas {" "}
                 <Image source={purpleHeartIcon} />
             </Text>
 
